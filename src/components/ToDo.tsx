@@ -1,8 +1,38 @@
 import React from "react";
-import { useSetRecoilState } from "recoil";
-import { Categories, IToDo, toDoState } from "../atoms";
+import { useSetRecoilState, useRecoilValue } from "recoil";
+import { categoriesState, IToDo, toDoState } from "../atoms";
+import styled from "styled-components";
+
+const List = styled.li`
+  margin: 8px;
+  list-style: none;
+  padding: 5px;
+  background-color: #717171;
+  border-radius: 10px;
+`;
+
+const Text = styled.div`
+  margin-bottom: 5px;
+  padding: 5px;
+  color: white;
+`;
+const Btns = styled.div`
+  display: flex;
+  justify-content: end;
+  margin-right: 2px;
+  padding: 2px;
+`;
+const Btn = styled.button`
+  margin-right: 5px;
+  padding: 2px;
+  color: white;
+  border: 2px solid white;
+  border-radius: 5px;
+  background-color: transparent;
+`;
 
 function ToDo({ text, category, id }: IToDo) {
+  const categories = useRecoilValue(categoriesState);
   const setToDos = useSetRecoilState(toDoState);
   const onDelete = () => {
     setToDos((oldToDos) => {
@@ -16,7 +46,12 @@ function ToDo({ text, category, id }: IToDo) {
     } = event;
     setToDos((oldToDos) => {
       const targetIndex = oldToDos.findIndex((toDo) => toDo.id === id);
-
+      if (name === "delete") {
+        return [
+          ...oldToDos.slice(0, targetIndex),
+          ...oldToDos.slice(targetIndex + 1),
+        ];
+      }
       const newToDo = { text, id, category: name as any };
       return [
         ...oldToDos.slice(0, targetIndex),
@@ -27,25 +62,25 @@ function ToDo({ text, category, id }: IToDo) {
   };
 
   return (
-    <li>
-      <span>{text}</span>
-      {category !== Categories.DOING && (
-        <button name={Categories.DOING} onClick={onClick}>
-          Doing
-        </button>
-      )}
-      {category !== Categories.TO_DO && (
-        <button name={Categories.TO_DO} onClick={onClick}>
-          To Do
-        </button>
-      )}
-      {category !== Categories.DONE && (
-        <button name={Categories.DONE} onClick={onClick}>
-          Done
-        </button>
-      )}
-      <button onClick={onDelete}>Delete</button>
-    </li>
+    <>
+      <List>
+        <Text>{text}</Text>
+        <Btns>
+          {categories.map((c, i) => {
+            return (
+              i != category && (
+                <Btn key={c} name={i.toString()} onClick={onClick}>
+                  {c}
+                </Btn>
+              )
+            );
+          })}
+          <Btn name={"delete"} onClick={onDelete}>
+            ❌
+          </Btn>
+        </Btns>
+      </List>
+    </>
   );
 }
 export default ToDo;

@@ -1,6 +1,29 @@
 import { useForm } from "react-hook-form";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { categoryState, toDoState } from "../atoms";
+import styled from "styled-components";
+
+const NewToDo = styled.form`
+  display: flex;
+  justify-content: center;
+  margin: 5px;
+`;
+const NewToDoInput = styled.input`
+  padding: 10px;
+  margin-right: 5px;
+  width: 85%;
+  border: 5px solid black;
+  border-radius: 10px;
+`;
+const AddBtn = styled.button`
+  border: none;
+  padding: 0 15px;
+  background-color: #333333;
+  border-radius: 10px;
+  font-size: 25px;
+  font-weight: 600;
+  color: red;
+`;
 
 interface IForm {
   toDo: string;
@@ -18,15 +41,15 @@ function CreateToDo() {
     setValue("toDo", "");
   };
   return (
-    <form onSubmit={handleSubmit(handleValid)}>
-      <input
+    <NewToDo onSubmit={handleSubmit(handleValid)}>
+      <NewToDoInput
         {...register("toDo", {
           required: "Please write a To Do",
         })}
         placeholder="Write a to do"
       />
-      <button>Add</button>
-    </form>
+      <AddBtn>+</AddBtn>
+    </NewToDo>
   );
 }
 

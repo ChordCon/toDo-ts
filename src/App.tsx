@@ -1,8 +1,11 @@
 import { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import ToDoList from "./components/ToDoList";
+import { ThemeProvider } from "styled-components";
+import { darkTheme } from "./theme";
 
 const GlobalStyle = createGlobalStyle`
-@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@300;400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Black+Han+Sans&display=swap');
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -52,10 +55,11 @@ table {
 }
 * {
   box-sizing: border-box;
+  
 }
 body {
   font-weight: 300;
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Black Han Sans', sans-serif;
   line-height: 1.2;
 }
 a {
@@ -64,12 +68,19 @@ a {
 }
 `;
 
+const Container = styled.div`
+  max-width: 400px;
+  margin: 10px auto;
+`;
+
 function App() {
   return (
-    <>
-      <GlobalStyle />
-      <ToDoList />
-    </>
+    <Container>
+      <ThemeProvider theme={darkTheme}>
+        <GlobalStyle />
+        <ToDoList />
+      </ThemeProvider>
+    </Container>
   );
 }
 export default App;
